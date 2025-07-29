@@ -1,71 +1,88 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Versículos Motivacionais da Bíblia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Versículo do Dia</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #0f0f2b;
-      color: white;
+      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px;
     }
-    h1 {
-      color: #ffcc00;
-      font-size: 2em;
+    .versiculo-box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      margin: 50px auto;
     }
-    #versiculo {
-      font-size: 1.2em;
+    .buttons {
       margin-top: 20px;
-      font-weight: bold;
-    }
-    #explicacao {
-      margin-top: 15px;
-      font-size: 1em;
     }
     button {
-      margin: 15px 10px;
-      padding: 10px 20px;
-      font-size: 1em;
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-      background-color: #ffcc00;
-      color: #000;
+      background-color: #ffffff;
+      color: #000000;
+    }
+    button:hover {
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
-  <h1>Versículos Motivacionais da Bíblia</h1>
-  <div id="versiculo">Carregando versículo...</div>
-  <div id="explicacao"></div>
-  <div>
-    <button onclick="atualizarVersiculo()">Atualizar Versículo</button>
-    <button onclick="compartilhar()">Compartilhar</button>
+  <div class="versiculo-box">
+    <h2 id="versiculoTexto"></h2>
+    <h4 id="versiculoReferencia"></h4>
+    <p id="versiculoExplicacao"></p>
+    <div class="buttons">
+      <button onclick="novoVersiculo()">🔁 Novo Versículo</button>
+      <button onclick="copiarVersiculo()">📋 Copiar</button>
+      <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
+    </div>
   </div>
 
   <script src="versiculos.js"></script>
   <script>
-    function atualizarVersiculo() {
-      const aleatorio = Math.floor(Math.random() * versiculos.length);
-      const escolhido = versiculos[aleatorio];
-      document.getElementById('versiculo').innerText = escolhido.versiculo;
-      document.getElementById('explicacao').innerText = escolhido.explicacao;
+    function novoVersiculo() {
+      const v = versiculos[Math.floor(Math.random() * versiculos.length)];
+      document.getElementById('versiculoTexto').innerText = '“' + v.texto + '”';
+      document.getElementById('versiculoReferencia').innerText = v.referencia;
+      document.getElementById('versiculoExplicacao').innerText = v.explicacao;
     }
 
-    function compartilhar() {
-      const texto = document.getElementById('versiculo').innerText + "\n" + document.getElementById('explicacao').innerText;
+    function copiarVersiculo() {
+      const texto = document.getElementById('versiculoTexto').innerText + "\\n" +
+                    document.getElementById('versiculoReferencia').innerText + "\\n" +
+                    document.getElementById('versiculoExplicacao').innerText;
+      navigator.clipboard.writeText(texto)
+        .then(() => alert('Versículo copiado!'))
+        .catch(err => alert('Erro ao copiar.'));
+    }
+
+    function compartilharVersiculo() {
+      const texto = document.getElementById('versiculoTexto').innerText + "\\n" +
+                    document.getElementById('versiculoReferencia').innerText + "\\n" +
+                    document.getElementById('versiculoExplicacao').innerText;
       if (navigator.share) {
-        navigator.share({ text: texto });
+        navigator.share({
+          title: 'Versículo do Dia',
+          text: texto
+        }).catch(error => alert('Erro ao compartilhar.'));
       } else {
-        alert("Compartilhamento não suportado neste navegador.");
+        alert('Compartilhamento não suportado neste navegador.');
       }
     }
 
-    atualizarVersiculo();
+    window.onload = novoVersiculo;
   </script>
 </body>
 </html>

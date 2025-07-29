@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Versículo Motivacional do Dia</title>
+  <title>Versículo do Dia</title>
   <style>
     body {
       margin: 0;
@@ -27,22 +27,14 @@
       margin: auto;
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
     .versiculo {
       font-size: 1.3rem;
       margin: 1rem 0;
     }
-    .referencia {
-      font-weight: bold;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
     .explicacao {
       font-style: italic;
       margin-bottom: 1.5rem;
+      font-size: 1.1rem;
     }
     .botoes button {
       margin: 0.5rem;
@@ -57,69 +49,49 @@
     .botoes button:hover {
       background-color: #0077cc;
     }
-    footer {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h1>Versículo Motivacional do Dia</h1>
-    <div class="versiculo" id="texto"></div>
-    <div class="referencia" id="referencia"></div>
-    <div class="explicacao" id="explicacao"></div>
+    <div id="versiculo" class="versiculo">Carregando versículo...</div>
+    <div id="explicacao" class="explicacao">Aguarde a explicação...</div>
     <div class="botoes">
-      <button onclick="copiarVersiculo()">📋 Copiar</button>
-      <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
-      <button onclick="novoVersiculo()">🔄 Novo</button>
+      <button onclick="mostrarVersiculo()">Novo Versículo</button>
+      <button onclick="copiarVersiculo()">Copiar</button>
+      <button onclick="compartilharVersiculo()">Compartilhar</button>
     </div>
-    <footer>&copy; Palavra Viva de Deus</footer>
   </div>
 
   <script src="versiculos.js"></script>
   <script>
-    function mostrarVersiculo(index) {
-      const v = versiculos[index];
-      document.getElementById('texto').textContent = `"${v.texto}"`;
-      document.getElementById('referencia').textContent = v.referencia;
-      document.getElementById('explicacao').textContent = v.explicacao;
+    let versiculoAtual = "";
+
+    function mostrarVersiculo() {
+      const index = Math.floor(Math.random() * versiculos.length);
+      const item = versiculos[index];
+      versiculoAtual = `${item.texto} - ${item.referencia}`;
+      document.getElementById("versiculo").textContent = versiculoAtual;
+      document.getElementById("explicacao").textContent = item.explicacao || "Medite nesse versículo com fé.";
     }
 
-    let indiceAtual = Math.floor(Math.random() * versiculos.length);
-    mostrarVersiculo(indiceAtual);
-
     function copiarVersiculo() {
-      const texto = `"${versiculos[indiceAtual].texto}"\n${versiculos[indiceAtual].referencia}\n${versiculos[indiceAtual].explicacao}`;
-      navigator.clipboard.writeText(texto).then(() => {
-        alert("📋 Versículo copiado!");
-      });
+      navigator.clipboard.writeText(versiculoAtual);
+      alert("Versículo copiado!");
     }
 
     function compartilharVersiculo() {
-      const v = versiculos[indiceAtual];
-      const textoCompartilhar = `${v.texto}\n${v.referencia}\n${v.explicacao}`;
       if (navigator.share) {
         navigator.share({
-          title: "Versículo Motivacional",
-          text: textoCompartilhar,
+          title: "Versículo do Dia",
+          text: versiculoAtual,
           url: window.location.href
-        }).catch(err => alert("Erro ao compartilhar: " + err));
+        });
       } else {
-        alert("O compartilhamento não é suportado neste navegador.");
+        alert("Compartilhamento não suportado neste navegador.");
       }
     }
 
-    function novoVersiculo() {
-      let novoIndice;
-      do {
-        novoIndice = Math.floor(Math.random() * versiculos.length);
-      } while (novoIndice === indiceAtual);
-      indiceAtual = novoIndice;
-      mostrarVersiculo(indiceAtual);
-    }
+    mostrarVersiculo();
   </script>
 </body>
 </html>

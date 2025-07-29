@@ -1,89 +1,73 @@
 
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Versículo do Dia</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Versículos Bíblicos</title>
+  <style>
     body {
-      font-family: Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      margin: 0;
+      font-family: sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb');
       background-size: cover;
-      color: #ffffff;
+      background-position: center;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 20px;
       text-align: center;
-      padding: 20px;
+      max-width: 90%;
     }
-    .versiculo-box {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 700px;
-      margin: 50px auto;
+    .caixa {
+      font-size: 1.2em;
+      margin-bottom: 20px;
     }
-    .buttons {
-      margin-top: 20px;
-    }
-    button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
+    .botoes button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1em;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
-      background-color: #ffffff;
-      color: #000000;
-    }
-    button:hover {
-      opacity: 0.9;
     }
   </style>
 </head>
 <body>
-<div class="versiculo-box">
-<h2 id="versiculoTexto"></h2>
-<h4 id="versiculoReferencia"></h4>
-<p id="versiculoExplicacao"></p>
-<div class="buttons">
-<div class="versiculo-box" id="versiculo">Clique em "Novo Versículo" para começar!</div><button onclick="novoVersiculo()">🔁 Novo Versículo</button>
-<button onclick="copiarVersiculo()">📋 Copiar</button>
-<button onclick="compartilharVersiculo()">📤 Compartilhar</button>
-</div>
-</div>
-<script src="versiculos.js"></script>
-<script>
-    function novoVersiculo() {
-      const v = versiculos[Math.floor(Math.random() * versiculos.length)];
-      document.getElementById('versiculoTexto').innerText = '“' + v.texto + '”';
-      document.getElementById('versiculoReferencia').innerText = v.referencia;
-      document.getElementById('versiculoExplicacao').innerText = v.explicacao;
+  <div class="container">
+    <div id="versiculo" class="caixa">Clique em "Novo Versículo" para começar!</div>
+    <div class="botoes">
+      <button onclick="mostrarVersiculoAleatorio()">🔁 Novo Versículo</button>
+      <button onclick="copiarVersiculo()">📋 Copiar</button>
+      <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
+    </div>
+  </div>
+  <script src="versiculos.js"></script>
+  <script>
+    function mostrarVersiculoAleatorio() {
+      const index = Math.floor(Math.random() * versiculos.length);
+      document.getElementById("versiculo").innerText = versiculos[index];
     }
-
     function copiarVersiculo() {
-      const texto = document.getElementById('versiculoTexto').innerText + "\\n" +
-                    document.getElementById('versiculoReferencia').innerText + "\\n" +
-                    document.getElementById('versiculoExplicacao').innerText;
-      navigator.clipboard.writeText(texto)
-        .then(() => alert('Versículo copiado!'))
-        .catch(err => alert('Erro ao copiar.'));
+      const texto = document.getElementById("versiculo").innerText;
+      navigator.clipboard.writeText(texto);
+      alert("Versículo copiado!");
     }
-
     function compartilharVersiculo() {
-      const texto = document.getElementById('versiculoTexto').innerText + "\\n" +
-                    document.getElementById('versiculoReferencia').innerText + "\\n" +
-                    document.getElementById('versiculoExplicacao').innerText;
+      const texto = document.getElementById("versiculo").innerText;
       if (navigator.share) {
-        navigator.share({
-          title: 'Versículo do Dia',
-          text: texto
-        }).catch(error => alert('Erro ao compartilhar.'));
+        navigator.share({ text: texto });
       } else {
-        alert('Compartilhamento não suportado neste navegador.');
+        alert("Compartilhamento não suportado neste dispositivo.");
       }
     }
-
-    window.onload = novoVersiculo;
   </script>
 </body>
 </html>

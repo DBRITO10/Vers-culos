@@ -7,110 +7,114 @@
   <title>Versículo do Dia</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
-      color: #fff;
       background: url('fundo.jpg') no-repeat center center fixed;
       background-size: cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      color: white;
       text-align: center;
-      backdrop-filter: brightness(0.7);
+      padding: 30px 15px;
     }
 
     .container {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 25px;
       border-radius: 15px;
-      max-width: 90%;
+      display: inline-block;
+      max-width: 600px;
+      margin-top: 40px;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 20px;
     }
 
     #versiculo {
-      font-size: 1.4rem;
-      margin-bottom: 15px;
+      font-size: 22px;
+      margin: 20px 0 10px;
     }
 
     #referencia {
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 18px;
       margin-bottom: 15px;
+      color: #ccc;
     }
 
     #explicacao {
-      font-size: 1rem;
+      font-size: 18px;
       margin-bottom: 20px;
       font-style: italic;
+      color: #fff;
     }
 
-    .botoes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 15px;
+    .botoes button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 1rem;
     }
 
-    button:hover {
-      background-color: #45a049;
+    .botoes button:hover {
+      opacity: 0.9;
     }
+
+    .atualizar { background-color: #4CAF50; color: white; }
+    .copiar { background-color: #2196F3; color: white; }
+    .compartilhar { background-color: #FF5722; color: white; }
   </style>
 </head>
 <body>
   <div class="container">
+    <h1>Versículo do Dia</h1>
     <div id="versiculo">Carregando versículo...</div>
     <div id="referencia"></div>
     <div id="explicacao"></div>
+
     <div class="botoes">
-      <button onclick="novoVersiculo()">Novo Versículo</button>
-      <button onclick="copiarVersiculo()">Copiar</button>
-      <button onclick="compartilharVersiculo()">Compartilhar</button>
+      <button class="atualizar" onclick="mostrarVersiculo()">Novo Versículo</button>
+      <button class="copiar" onclick="copiarVersiculo()">Copiar</button>
+      <button class="compartilhar" onclick="compartilharVersiculo()">Compartilhar</button>
     </div>
   </div>
 
   <script src="versiculos.js"></script>
   <script>
-    let versiculoAtual = {};
-
-    function novoVersiculo() {
-      versiculoAtual = versiculos[Math.floor(Math.random() * versiculos.length)];
-      document.getElementById("versiculo").textContent = versiculoAtual.texto;
-      document.getElementById("referencia").textContent = versiculoAtual.referencia;
-      document.getElementById("explicacao").textContent = versiculoAtual.explicacao;
+    function mostrarVersiculo() {
+      const v = versiculos[Math.floor(Math.random() * versiculos.length)];
+      document.getElementById("versiculo").textContent = v.texto;
+      document.getElementById("referencia").textContent = v.referencia;
+      document.getElementById("explicacao").textContent = v.explicacao;
     }
 
     function copiarVersiculo() {
-      const texto = `${versiculoAtual.texto}\n${versiculoAtual.referencia}\n${versiculoAtual.explicacao}`;
-      navigator.clipboard.writeText(texto)
-        .then(() => alert("Versículo copiado!"))
-        .catch(() => alert("Erro ao copiar."));
+      const texto = document.getElementById("versiculo").textContent;
+      const ref = document.getElementById("referencia").textContent;
+      const exp = document.getElementById("explicacao").textContent;
+      const combinado = `${texto}\n${ref}\n\n${exp}`;
+      navigator.clipboard.writeText(combinado);
+      alert("Versículo copiado com sucesso!");
     }
 
     function compartilharVersiculo() {
-      const texto = `${versiculoAtual.texto}\n${versiculoAtual.referencia}\n${versiculoAtual.explicacao}`;
+      const texto = document.getElementById("versiculo").textContent;
+      const ref = document.getElementById("referencia").textContent;
+      const exp = document.getElementById("explicacao").textContent;
+      const combinado = `${texto}\n${ref}\n\n${exp}`;
+
       if (navigator.share) {
         navigator.share({
-          text: texto
-        });
+          title: 'Versículo do Dia',
+          text: combinado
+        }).catch((err) => console.log("Erro ao compartilhar:", err));
       } else {
-        alert("Compartilhamento não suportado neste dispositivo.");
+        alert("Seu navegador não suporta o compartilhamento direto.");
       }
     }
 
-    // Mostrar um versículo ao carregar
-    window.onload = novoVersiculo;
+    // Mostrar automaticamente ao abrir
+    mostrarVersiculo();
   </script>
 </body>
 </html>

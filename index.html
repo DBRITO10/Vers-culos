@@ -1,11 +1,12 @@
 
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Versículo do Dia</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Versículo do Dia</title>
+<style>
     body {
       font-family: Arial, sans-serif;
       background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
@@ -40,19 +41,18 @@
   </style>
 </head>
 <body>
-  <div class="versiculo-box">
-    <h2 id="versiculoTexto"></h2>
-    <h4 id="versiculoReferencia"></h4>
-    <p id="versiculoExplicacao"></p>
-    <div class="buttons">
-      <button onclick="novoVersiculo()">🔁 Novo Versículo</button>
-      <button onclick="copiarVersiculo()">📋 Copiar</button>
-      <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
-    </div>
-  </div>
-
-  <script src="versiculos.js"></script>
-  <script>
+<div class="versiculo-box">
+<h2 id="versiculoTexto"></h2>
+<h4 id="versiculoReferencia"></h4>
+<p id="versiculoExplicacao"></p>
+<div class="buttons">
+<button onclick="novoVersiculo()">🔁 Novo Versículo</button>
+<button onclick="copiarVersiculo()">📋 Copiar</button>
+<button onclick="compartilharVersiculo()">📤 Compartilhar</button>
+</div>
+</div>
+<script src="versiculos.js"></script>
+<script>
     function novoVersiculo() {
       const v = versiculos[Math.floor(Math.random() * versiculos.length)];
       document.getElementById('versiculoTexto').innerText = '“' + v.texto + '”';

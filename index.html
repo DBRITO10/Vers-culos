@@ -73,7 +73,7 @@
     <div class="explicacao" id="explicacao"></div>
     <div class="botoes">
       <button onclick="copiarVersiculo()">📋 Copiar</button>
-      <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
+      <button onclick="compartilharComoImagem()">📤 Compartilhar</button>
       <button onclick="novoVersiculo()">🔄 Novo</button>
     </div>
     <footer>&copy; Palavra Viva de Deus</footer>
@@ -98,18 +98,75 @@
       });
     }
 
-    function compartilharVersiculo() {
-      const v = versiculos[indiceAtual];
-      const textoCompartilhar = `${v.texto}\n${v.referencia}\n${v.explicacao}`;
-      if (navigator.share) {
-        navigator.share({
-          title: "Versículo Motivacional",
-          text: textoCompartilhar,
-          url: window.location.href
-        }).catch(err => alert("Erro ao compartilhar: " + err));
-      } else {
-        alert("O compartilhamento não é suportado neste navegador.");
+    function compartilharComoImagem() {
+      const titulo = "Versículo Motivacional do Dia";
+      const texto = versiculos[indiceAtual].texto;
+      const referencia = versiculos[indiceAtual].referencia;
+      const explicacao = versiculos[indiceAtual].explicacao;
+
+      const largura = 1080;
+      const altura = 1080;
+      const canvas = document.createElement("canvas");
+      canvas.width = largura;
+      canvas.height = altura;
+      const ctx = canvas.getContext("2d");
+
+      const grad = ctx.createLinearGradient(0, 0, 0, altura);
+      grad.addColorStop(0, "#002b36");
+      grad.addColorStop(1, "#0f2027");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, largura, altura);
+
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+
+      ctx.font = "bold 42px Segoe UI";
+      ctx.fillText(titulo, largura / 2, 100);
+
+      ctx.font = "28px Segoe UI";
+      drawMultilineText(ctx, `\"${texto}\"`, largura / 2, 200, 800);
+
+      ctx.font = "bold 30px Segoe UI";
+      ctx.fillText("📖 " + referencia, largura / 2, 480);
+
+      ctx.font = "italic 26px Segoe UI";
+      drawMultilineText(ctx, explicacao, largura / 2, 540, 800);
+
+      canvas.toBlob(blob => {
+        const file = new File([blob], "versiculo.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: "Versículo do Dia",
+            text: "Palavra Viva de Deus",
+            files: [file]
+          }).catch(() => alert("Compartilhamento cancelado."));
+        } else {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "versiculo.png";
+          link.click();
+        }
+      }, "image/png");
+    }
+
+    function drawMultilineText(ctx, text, x, startY, maxWidth, lineHeight = 36) {
+      const words = text.split(' ');
+      let line = '';
+      let y = startY;
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
       }
+      ctx.fillText(line, x, y);
     }
 
     function novoVersiculo() {

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Versículos Motivacionais da Bíblia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0f0f2b;
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      color: #ffcc00;
+      font-size: 2em;
+    }
+    #versiculo {
+      font-size: 1.2em;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #explicacao {
+      margin-top: 15px;
+      font-size: 1em;
+    }
+    button {
+      margin: 15px 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #ffcc00;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Versículos Motivacionais da Bíblia</h1>
+  <div id="versiculo">Carregando versículo...</div>
+  <div id="explicacao"></div>
+  <div>
+    <button onclick="atualizarVersiculo()">Atualizar Versículo</button>
+    <button onclick="compartilhar()">Compartilhar</button>
+  </div>
+
+  <script src="versiculos.js"></script>
+  <script>
+    function atualizarVersiculo() {
+      const aleatorio = Math.floor(Math.random() * versiculos.length);
+      const escolhido = versiculos[aleatorio];
+      document.getElementById('versiculo').innerText = escolhido.versiculo;
+      document.getElementById('explicacao').innerText = escolhido.explicacao;
+    }
+
+    function compartilhar() {
+      const texto = document.getElementById('versiculo').innerText + "\n" + document.getElementById('explicacao').innerText;
+      if (navigator.share) {
+        navigator.share({ text: texto });
+      } else {
+        alert("Compartilhamento não suportado neste navegador.");
+      }
+    }
+
+    atualizarVersiculo();
+  </script>
+</body>
+</html>

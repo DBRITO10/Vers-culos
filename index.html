@@ -3,71 +3,114 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Versículos Bíblicos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Versículo do Dia</title>
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
-      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb');
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      background: url('fundo.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      color: white;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      backdrop-filter: brightness(0.7);
     }
+
     .container {
       background-color: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      border-radius: 20px;
-      text-align: center;
+      padding: 30px;
+      border-radius: 15px;
       max-width: 90%;
     }
-    .caixa {
-      font-size: 1.2em;
-      margin-bottom: 20px;
+
+    #versiculo {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
     }
-    .botoes button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 1em;
+
+    #referencia {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    #explicacao {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .botoes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div id="versiculo" class="caixa">Clique em "Novo Versículo" para começar!</div>
+    <div id="versiculo">Carregando versículo...</div>
+    <div id="referencia"></div>
+    <div id="explicacao"></div>
     <div class="botoes">
-      <button onclick="mostrarVersiculoAleatorio()">🔁 Novo Versículo</button>
-      <button onclick="copiarVersiculo()">📋 Copiar</button>
-      <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
+      <button onclick="novoVersiculo()">Novo Versículo</button>
+      <button onclick="copiarVersiculo()">Copiar</button>
+      <button onclick="compartilharVersiculo()">Compartilhar</button>
     </div>
   </div>
+
   <script src="versiculos.js"></script>
   <script>
-    function mostrarVersiculoAleatorio() {
-      const index = Math.floor(Math.random() * versiculos.length);
-      document.getElementById("versiculo").innerText = versiculos[index];
+    let versiculoAtual = {};
+
+    function novoVersiculo() {
+      versiculoAtual = versiculos[Math.floor(Math.random() * versiculos.length)];
+      document.getElementById("versiculo").textContent = versiculoAtual.texto;
+      document.getElementById("referencia").textContent = versiculoAtual.referencia;
+      document.getElementById("explicacao").textContent = versiculoAtual.explicacao;
     }
+
     function copiarVersiculo() {
-      const texto = document.getElementById("versiculo").innerText;
-      navigator.clipboard.writeText(texto);
-      alert("Versículo copiado!");
+      const texto = `${versiculoAtual.texto}\n${versiculoAtual.referencia}\n${versiculoAtual.explicacao}`;
+      navigator.clipboard.writeText(texto)
+        .then(() => alert("Versículo copiado!"))
+        .catch(() => alert("Erro ao copiar."));
     }
+
     function compartilharVersiculo() {
-      const texto = document.getElementById("versiculo").innerText;
+      const texto = `${versiculoAtual.texto}\n${versiculoAtual.referencia}\n${versiculoAtual.explicacao}`;
       if (navigator.share) {
-        navigator.share({ text: texto });
+        navigator.share({
+          text: texto
+        });
       } else {
         alert("Compartilhamento não suportado neste dispositivo.");
       }
     }
+
+    // Mostrar um versículo ao carregar
+    window.onload = novoVersiculo;
   </script>
 </body>
 </html>

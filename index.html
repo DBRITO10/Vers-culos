@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aH...') no-repeat center center fixed;
+      background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAQ4B4ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0N') no-repeat center center fixed;
       background-size: cover;
       color: white;
       text-align: center;
@@ -121,28 +121,27 @@
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const background = new Image();
-    background.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aH...'; // mesma imagem do fundo
-
+    background.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAQ4B4ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0N';
     background.onload = () => {
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
       ctx.font = "bold 40px Segoe UI";
-      ctx.fillText("Versículo Motivacional do Dia", canvas.width / 2, 120);
+      ctx.fillText("Versículo do Dia", canvas.width / 2, 100);
 
       ctx.font = "32px Segoe UI";
-      ctx.fillText(v.texto, canvas.width / 2, 240);
+      ctx.fillText(v.texto, canvas.width / 2, 200);
 
       ctx.font = "bold 30px Segoe UI";
-      ctx.fillText(`📖 ${v.referencia}`, canvas.width / 2, 330);
+      ctx.fillText(`📖 ${v.referencia}`, canvas.width / 2, 280);
 
       ctx.font = "italic 28px Segoe UI";
-      ctx.fillText(v.explicacao, canvas.width / 2, 410);
+      ctx.fillText(v.explicacao, canvas.width / 2, 360);
 
-      ctx.font = "24px Segoe UI";
       ctx.fillStyle = "#cccccc";
-      ctx.fillText("© Palavra Viva de Deus", canvas.width / 2, 1040);
+      ctx.font = "24px Segoe UI";
+      ctx.fillText("© Palavra Viva de Deus", canvas.width / 2, 1050);
 
       canvas.toBlob((blob) => {
         const file = new File([blob], "versiculo.png", { type: "image/png" });

@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAQ4B4ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0N') no-repeat center center fixed;
+      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
       background-size: cover;
       color: white;
       text-align: center;
@@ -20,7 +20,7 @@
       padding: 1rem;
     }
     .container {
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.7);
       border-radius: 15px;
       padding: 2rem;
       max-width: 600px;
@@ -62,106 +62,121 @@
       font-size: 0.8rem;
       opacity: 0.8;
     }
-    canvas {
-      display: none;
-    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Versículo Motivacional do Dia</h1>
-  <div class="versiculo" id="texto"></div>
-  <div class="referencia" id="referencia"></div>
-  <div class="explicacao" id="explicacao"></div>
-  <div class="botoes">
-    <button onclick="copiarVersiculo()">📋 Copiar</button>
-    <button onclick="compartilharVersiculo()">📤 Compartilhar</button>
-    <button onclick="novoVersiculo()">🔄 Novo</button>
+  <div class="container">
+    <h1>Versículo Motivacional do Dia</h1>
+    <div class="versiculo" id="texto"></div>
+    <div class="referencia" id="referencia"></div>
+    <div class="explicacao" id="explicacao"></div>
+    <div class="botoes">
+      <button onclick="copiarVersiculo()">📋 Copiar</button>
+      <button onclick="compartilharComoImagem()">📤 Compartilhar</button>
+      <button onclick="novoVersiculo()">🔄 Novo</button>
+    </div>
+    <footer>&copy; Palavra Viva de Deus</footer>
   </div>
-  <footer>&copy; Palavra Viva de Deus</footer>
-</div>
 
-<canvas id="canvas" width="1080" height="1080"></canvas>
+  <script src="versiculos.js"></script>
+  <script>
+    function mostrarVersiculo(index) {
+      const v = versiculos[index];
+      document.getElementById('texto').textContent = `"${v.texto}"`;
+      document.getElementById('referencia').textContent = v.referencia;
+      document.getElementById('explicacao').textContent = v.explicacao;
+    }
 
-<script src="versiculos.js"></script>
-<script>
-  const versiculoEl = document.getElementById('texto');
-  const referenciaEl = document.getElementById('referencia');
-  const explicacaoEl = document.getElementById('explicacao');
-
-  let indiceAtual = Math.floor(Math.random() * versiculos.length);
-  mostrarVersiculo(indiceAtual);
-
-  function mostrarVersiculo(index) {
-    const v = versiculos[index];
-    versiculoEl.textContent = `"${v.texto}"`;
-    referenciaEl.textContent = `📖 ${v.referencia}`;
-    explicacaoEl.textContent = v.explicacao;
-  }
-
-  function copiarVersiculo() {
-    const texto = `${versiculoEl.textContent}\n${referenciaEl.textContent}\n${explicacaoEl.textContent}`;
-    navigator.clipboard.writeText(texto).then(() => {
-      alert("📋 Versículo copiado!");
-    });
-  }
-
-  function novoVersiculo() {
-    let novoIndice;
-    do {
-      novoIndice = Math.floor(Math.random() * versiculos.length);
-    } while (novoIndice === indiceAtual);
-    indiceAtual = novoIndice;
+    let indiceAtual = Math.floor(Math.random() * versiculos.length);
     mostrarVersiculo(indiceAtual);
-  }
 
-  function compartilharVersiculo() {
-    const v = versiculos[indiceAtual];
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const background = new Image();
-    background.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAQ4B4ADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0N';
-    background.onload = () => {
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    function copiarVersiculo() {
+      const texto = `"${versiculos[indiceAtual].texto}"\n${versiculos[indiceAtual].referencia}\n${versiculos[indiceAtual].explicacao}`;
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("📋 Versículo copiado!");
+      });
+    }
+
+    function compartilharComoImagem() {
+      const titulo = "Versículo Motivacional do Dia";
+      const texto = versiculos[indiceAtual].texto;
+      const referencia = versiculos[indiceAtual].referencia;
+      const explicacao = versiculos[indiceAtual].explicacao;
+
+      const largura = 1080;
+      const altura = 1080;
+      const canvas = document.createElement("canvas");
+      canvas.width = largura;
+      canvas.height = altura;
+      const ctx = canvas.getContext("2d");
+
+      const grad = ctx.createLinearGradient(0, 0, 0, altura);
+      grad.addColorStop(0, "#002b36");
+      grad.addColorStop(1, "#0f2027");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, largura, altura);
 
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
-      ctx.font = "bold 40px Segoe UI";
-      ctx.fillText("Versículo do Dia", canvas.width / 2, 100);
 
-      ctx.font = "32px Segoe UI";
-      ctx.fillText(v.texto, canvas.width / 2, 200);
+      ctx.font = "bold 42px Segoe UI";
+      ctx.fillText(titulo, largura / 2, 100);
+
+      ctx.font = "28px Segoe UI";
+      drawMultilineText(ctx, `\"${texto}\"`, largura / 2, 200, 800);
 
       ctx.font = "bold 30px Segoe UI";
-      ctx.fillText(`📖 ${v.referencia}`, canvas.width / 2, 280);
+      ctx.fillText("📖 " + referencia, largura / 2, 480);
 
-      ctx.font = "italic 28px Segoe UI";
-      ctx.fillText(v.explicacao, canvas.width / 2, 360);
+      ctx.font = "italic 26px Segoe UI";
+      drawMultilineText(ctx, explicacao, largura / 2, 540, 800);
 
-      ctx.fillStyle = "#cccccc";
-      ctx.font = "24px Segoe UI";
-      ctx.fillText("© Palavra Viva de Deus", canvas.width / 2, 1050);
-
-      canvas.toBlob((blob) => {
+      canvas.toBlob(blob => {
         const file = new File([blob], "versiculo.png", { type: "image/png" });
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           navigator.share({
-            files: [file],
-            title: 'Versículo do Dia',
-            text: `"${v.texto}" - ${v.referencia}`,
-          }).catch((err) => alert("Erro ao compartilhar: " + err));
+            title: "Versículo do Dia",
+            text: "Palavra Viva de Deus",
+            files: [file]
+          }).catch(() => alert("Compartilhamento cancelado."));
         } else {
           const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = "versiculo.png";
-          a.click();
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "versiculo.png";
+          link.click();
         }
       }, "image/png");
-    };
-  }
-</script>
+    }
 
+    function drawMultilineText(ctx, text, x, startY, maxWidth, lineHeight = 36) {
+      const words = text.split(' ');
+      let line = '';
+      let y = startY;
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, y);
+    }
+
+    function novoVersiculo() {
+      let novoIndice;
+      do {
+        novoIndice = Math.floor(Math.random() * versiculos.length);
+      } while (novoIndice === indiceAtual);
+      indiceAtual = novoIndice;
+      mostrarVersiculo(indiceAtual);
+    }
+  </script>
 </body>
 </html>

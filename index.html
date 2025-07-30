@@ -122,7 +122,7 @@
       const ctx = canvas.getContext('2d');
 
       const background = new Image();
-      background.crossOrigin = "anonymous"; // importante para permitir uso da imagem externa
+      background.crossOrigin = "anonymous";
       background.src = 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1080&q=80';
 
       background.onload = () => {
@@ -130,21 +130,23 @@
 
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
+        ctx.shadowColor = "black";
+        ctx.shadowBlur = 6;
 
-        ctx.font = "bold 40px Segoe UI";
+        ctx.font = "bold 48px Segoe UI";
         ctx.fillText("Versículo do Dia", canvas.width / 2, 100);
 
         ctx.font = "30px Segoe UI";
-        ctx.fillText(v.texto, canvas.width / 2, 200);
+        wrapText(ctx, v.texto, canvas.width / 2, 200, 900, 40);
 
-        ctx.font = "bold 28px Segoe UI";
-        ctx.fillText(`📖 ${v.referencia}`, canvas.width / 2, 270);
+        ctx.font = "bold 32px Segoe UI";
+        ctx.fillText(`📖 ${v.referencia}`, canvas.width / 2, 400);
 
-        ctx.font = "italic 26px Segoe UI";
-        ctx.fillText(v.explicacao, canvas.width / 2, 340);
+        ctx.font = "italic 28px Segoe UI";
+        wrapText(ctx, v.explicacao, canvas.width / 2, 460, 900, 36);
 
-        ctx.fillStyle = "#cccccc";
-        ctx.font = "24px Segoe UI";
+        ctx.fillStyle = "#eeeeee";
+        ctx.font = "22px Segoe UI";
         ctx.fillText("© Palavra Viva de Deus", canvas.width / 2, 1050);
 
         canvas.toBlob((blob) => {
@@ -164,6 +166,25 @@
           }
         }, "image/png");
       };
+    }
+
+    // Quebra de linha automática para canvas
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && i > 0) {
+          ctx.fillText(line, x, y);
+          line = words[i] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, y);
     }
   </script>
 

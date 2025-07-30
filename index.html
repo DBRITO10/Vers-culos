@@ -9,8 +9,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(to bottom, #0a2332, #162c35);
       color: white;
       text-align: center;
       display: flex;
@@ -73,100 +72,33 @@
     <div class="explicacao" id="explicacao"></div>
     <div class="botoes">
       <button onclick="copiarVersiculo()">📋 Copiar</button>
-      <button onclick="compartilharComoImagem()">📤 Compartilhar</button>
+      <button onclick="compartilharImagem()">📤 Compartilhar</button>
       <button onclick="novoVersiculo()">🔄 Novo</button>
     </div>
     <footer>&copy; Palavra Viva de Deus</footer>
   </div>
 
+  <canvas id="canvas" width="1080" height="1080" style="display:none;"></canvas>
+
   <script src="versiculos.js"></script>
   <script>
+    let indiceAtual = Math.floor(Math.random() * versiculos.length);
+    const versiculoDOM = document.getElementById('texto');
+    const referenciaDOM = document.getElementById('referencia');
+    const explicacaoDOM = document.getElementById('explicacao');
+
     function mostrarVersiculo(index) {
       const v = versiculos[index];
-      document.getElementById('texto').textContent = `"${v.texto}"`;
-      document.getElementById('referencia').textContent = v.referencia;
-      document.getElementById('explicacao').textContent = v.explicacao;
+      versiculoDOM.textContent = `"${v.texto}"`;
+      referenciaDOM.textContent = `📖 ${v.referencia}`;
+      explicacaoDOM.textContent = v.explicacao;
     }
 
-    let indiceAtual = Math.floor(Math.random() * versiculos.length);
     mostrarVersiculo(indiceAtual);
 
     function copiarVersiculo() {
-      const texto = `"${versiculos[indiceAtual].texto}"\n${versiculos[indiceAtual].referencia}\n${versiculos[indiceAtual].explicacao}`;
-      navigator.clipboard.writeText(texto).then(() => {
-        alert("📋 Versículo copiado!");
-      });
-    }
-
-    function compartilharComoImagem() {
-      const titulo = "Versículo Motivacional do Dia";
-      const texto = versiculos[indiceAtual].texto;
-      const referencia = versiculos[indiceAtual].referencia;
-      const explicacao = versiculos[indiceAtual].explicacao;
-
-      const largura = 1080;
-      const altura = 1080;
-      const canvas = document.createElement("canvas");
-      canvas.width = largura;
-      canvas.height = altura;
-      const ctx = canvas.getContext("2d");
-
-      const grad = ctx.createLinearGradient(0, 0, 0, altura);
-      grad.addColorStop(0, "#002b36");
-      grad.addColorStop(1, "#0f2027");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, largura, altura);
-
-      ctx.fillStyle = "white";
-      ctx.textAlign = "center";
-
-      ctx.font = "bold 42px Segoe UI";
-      ctx.fillText(titulo, largura / 2, 100);
-
-      ctx.font = "28px Segoe UI";
-      drawMultilineText(ctx, `\"${texto}\"`, largura / 2, 200, 800);
-
-      ctx.font = "bold 30px Segoe UI";
-      ctx.fillText("📖 " + referencia, largura / 2, 480);
-
-      ctx.font = "italic 26px Segoe UI";
-      drawMultilineText(ctx, explicacao, largura / 2, 540, 800);
-
-      canvas.toBlob(blob => {
-        const file = new File([blob], "versiculo.png", { type: "image/png" });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({
-            title: "Versículo do Dia",
-            text: "Palavra Viva de Deus",
-            files: [file]
-          }).catch(() => alert("Compartilhamento cancelado."));
-        } else {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "versiculo.png";
-          link.click();
-        }
-      }, "image/png");
-    }
-
-    function drawMultilineText(ctx, text, x, startY, maxWidth, lineHeight = 36) {
-      const words = text.split(' ');
-      let line = '';
-      let y = startY;
-      for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        if (testWidth > maxWidth && n > 0) {
-          ctx.fillText(line, x, y);
-          line = words[n] + ' ';
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
-      }
-      ctx.fillText(line, x, y);
+      const texto = `${versiculoDOM.textContent}\n${referenciaDOM.textContent}\n${explicacaoDOM.textContent}`;
+      navigator.clipboard.writeText(texto).then(() => alert("📋 Versículo copiado!"));
     }
 
     function novoVersiculo() {
@@ -176,6 +108,50 @@
       } while (novoIndice === indiceAtual);
       indiceAtual = novoIndice;
       mostrarVersiculo(indiceAtual);
+    }
+
+    async function compartilharImagem() {
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // fundo
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, "#0a2332");
+      grad.addColorStop(1, "#162c35");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // texto
+      ctx.fillStyle = "white";
+      ctx.font = "bold 48px Segoe UI";
+      ctx.textAlign = "center";
+      ctx.fillText("Versículo Motivacional do Dia", canvas.width/2, 120);
+
+      ctx.font = "36px Segoe UI";
+      ctx.fillText(versiculoDOM.textContent, canvas.width/2, 250);
+
+      ctx.font = "bold 34px Segoe UI";
+      ctx.fillText(referenciaDOM.textContent, canvas.width/2, 350);
+
+      ctx.font = "italic 32px Segoe UI";
+      ctx.fillText(explicacaoDOM.textContent, canvas.width/2, 430);
+
+      ctx.font = "28px Segoe UI";
+      ctx.fillStyle = "lightgray";
+      ctx.fillText("© Palavra Viva de Deus", canvas.width/2, 1000);
+
+      canvas.toBlob(blob => {
+        const file = new File([blob], "versiculo.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            files: [file],
+            title: "Versículo do Dia",
+            text: "Confira essa mensagem abençoada:"
+          }).catch(err => alert("Erro ao compartilhar: " + err));
+        } else {
+          alert("Este navegador não suporta o compartilhamento de imagem.");
+        }
+      });
     }
   </script>
 </body>

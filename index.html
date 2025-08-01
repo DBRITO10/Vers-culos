@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Versículo Motivacional do Dia</title>
+  <title>Versículo Motivacional</title>
   <style>
     body {
       margin: 0;
@@ -70,7 +70,7 @@
 <body>
 
   <div class="container">
-    <h1>Versículo Motivacional do Dia</h1>
+    <h1>Versículo Motivacional</h1>
     <div class="versiculo" id="texto"></div>
     <div class="referencia" id="referencia"></div>
     <div class="explicacao" id="explicacao"></div>
@@ -126,10 +126,9 @@
       background.src = 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1080&q=80';
 
       background.onload = () => {
-        // Desenha a imagem de fundo
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-        // Camada escura semi-transparente por cima para dar contraste (efeito "borrado escuro")
+        // Borrado escuro sobre o fundo
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -139,7 +138,7 @@
         ctx.shadowBlur = 6;
 
         ctx.font = "bold 60px Segoe UI";
-        ctx.fillText("Versículo Motivacional do Dia", canvas.width / 2, 140);
+        ctx.fillText("Versículo Motivacional", canvas.width / 2, 140);
 
         ctx.font = "40px Segoe UI";
         wrapText(ctx, `"${v.texto}"`, canvas.width / 2, 240, 900, 50);
@@ -174,7 +173,6 @@
       };
     }
 
-    // Quebra de linha automática para canvas
     function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
       const words = text.split(' ');
       let line = '';
